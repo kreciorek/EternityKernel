@@ -396,6 +396,29 @@ __LZ4_decompress_generic(const char *const src, char *const dst, const BYTE * ip
 			DEBUGLOG(6, "skip fast decode loop");
 			goto safe_decode;
 		}
+		/*
+		 * A two-stage shortcut for the most common case:
+		 * 1) If the literal length is 0..14, and there is enough
+		 * space, enter the shortcut and copy 16 bytes on behalf
+		 * of the literals (in the fast mode, only 8 bytes can be
+		 * safely copied this way).
+		 * 2) Further if the match length is 4..18, copy 18 bytes
+		 * in a similar manner; but we ensure that there's enough
+		 * space in the output for those 18 bytes earlier, upon
+		 * entering the shortcut (in other words, there is a
+		 * combined check for both stages).
+		 */
+		if ((endOnInput ? length != RUN_MASK : length <= 8)
+		   /*
+		    * strictly "less than" on input, to re-enter
+		    * the loop with at least one byte
+		    */
+		   && likely((endOnInput ? ip < shortiend : 1) &
+			     (op <= shortoend))) {
+			/* Copy the literals */
+			LZ4_memcpy(op, ip, endOnInput ? 16 : 8);
+			op += length;
+			ip += length;
 
 		/* Fast loop : decode sequences as long as output < oend-FASTLOOP_SAFE_DISTANCE */
 		while (1) {
@@ -732,10 +755,16 @@ safe_literal_copy:
 				op = cpy;
 			}
 
+<<<<<<< HEAD
 			/* get offset */
 			offset = LZ4_readLE16(ip);
 			ip += 2;
 			match = op - offset;
+=======
+			LZ4_memcpy(op, ip, length);
+			ip += length;
+			op += length;
+>>>>>>> ae4be541e1e6 (lz4: fix kernel decompression speed)
 
 			/* get matchlength */
 			length = token & ML_MASK;

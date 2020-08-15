@@ -156,7 +156,6 @@ static FORCE_INLINE void LZ4_writeLE16(void *memPtr, U16 value)
  * environments. This is needed when decompressing the Linux Kernel, for example.
  */
 #define LZ4_memcpy(dst, src, size) __builtin_memcpy(dst, src, size)
-#define LZ4_memmove(dst, src, size) __builtin_memmove(dst, src, size)
 
 /* customized variant of memcpy, which can overwrite up to 8 bytes beyond dstEnd */
 static FORCE_INLINE void LZ4_wildCopy8(void *dstPtr, const void *srcPtr,
