@@ -193,6 +193,9 @@ obj-$(CONFIG_FSI)		+= fsi/
 obj-$(CONFIG_TEE)		+= tee/
 obj-$(CONFIG_MULTIPLEXER)	+= mux/
 
+# Vibrator
+obj-y += vibrator/
+
 # CCIC
 obj-y	+= ccic/
 
