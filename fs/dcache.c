@@ -86,6 +86,7 @@ u8 ns_prot = 0;
  *     dentry2->d_lock
  */
 int sysctl_vfs_cache_pressure __read_mostly = 20;
+int sysctl_vfs_cache_pressure __read_mostly = 50;
 EXPORT_SYMBOL_GPL(sysctl_vfs_cache_pressure);
 
 __cacheline_aligned_in_smp DEFINE_SEQLOCK(rename_lock);
