@@ -1,18 +1,84 @@
-Linux kernel
-============
+# EternityKernel for Exynos 9820/9825 devices
 
-This file was moved to Documentation/admin-guide/README.rst
+## Features
 
-Please notice that there are several guides for kernel developers and users.
-These guides can be rendered in a number of formats, like HTML and PDF.
+- Linux 4.14.113
+- OneUI 6.x support
+- Supports all s10/n10 devices
+- Compiled with Neutron Clang 18 + LLVM/LLVM_IAS and arhitecture optimization
+- KernelSU v0.9.5 (version 11872) support
+- Based on the latest Samsung source for Exynos 990
+- Support newer partition map (with odm, prism and optics partitions)
+- Fixed all compilation warnings and some Samsung bugs
+- Disabled Samsung's anti-rooting protection
+- Partially disabled Samsung's excessive tracing
+- Enabled all TCP Scheduling Algorithms, CPU Governors and I/O Schedulers available in the source
+- SELinux Enforcing
+- Boeffla Wakelock Blocker support with a decent default list
+- Wireguard support
+- Charging Bypass support
+- LZ4 ZRAM compression by default
+- Backported the Timer Events Oriented (TEO) CPUIdle Governor from 5.x kernel
+- Backported VDSO(32) from upstream 4.19-stable kernel
+- Backported latest LZ4 1.9.4 module with ARM64v8 optimizations
+- Backported IncrementalFS (https://source.android.com/docs/core/architecture/kernel/incfs) from latest 4.19-stable (Requires ROM support)
+- Backported FUSE Passthrough (Requires ROM support)
+- Various network optimizations and touch latency tweaks
+- Various stability/optimization backports from newer Android kernel versions
+- Various general architecture patches, CPU improvements, memory management improvements etc
+- Various other backports from newer kernel versions
+- Easy to modify and compile for developers
+- Optimized for a balance between performance, battery life and low thermals
+- Fully open source with a clean commit history
 
-In order to build the documentation, use ``make htmldocs`` or
-``make pdfdocs``.
+## Supported devices:
 
-There are various text files in the Documentation/ subdirectory,
-several of them using the Restructured Text markup notation.
-See Documentation/00-INDEX for a list of what is contained in each file.
+G980F - S20 4G - x1slte
 
-Please read the Documentation/process/changes.rst file, as it contains the
-requirements for building and running the kernel, and information about
-the problems which may result by upgrading your kernel.
+G981B - S20 5G - x1s
+
+G985F - S20+ 4G - y2slte
+
+G986B - S20+ 5G - y2s
+
+G988B - S20 Ultra (5G) - z3s
+
+N970F - Note 10 - d1
+
+N971N - Note 10 5G (korean) - d1xks
+
+N975F - Note 10+ 4G - d2s
+
+N976B - Note 10+ 5G - d2x
+
+N976N - Note 10+ 5g (korean) - d2xks
+
+
+## Build instructions:
+
+1. Set up build environment as per Google documentation
+
+https://source.android.com/docs/setup/start/requirements
+
+* The `libarchive-tools` package is also necessary to patch the toolchain.
+* The `ccache` package is necessary if you wish to build with CCache (Quicker subsequest builds)
+
+2. Properly clone repository with submodules (KernelSU and toolchains)
+
+```git clone --recurse-submodules https://github.com/Ocin4ever/EternityKernel/.git```
+
+3.1) Build for International variant (d2s in this case)
+
+```./build.sh d2s```
+
+3.2) Build for Korean variant (d2xks in this case)
+
+```./build.sh d2x N```
+
+4. Fetch the flashable zip of the kernel that was just compiled
+
+```build/out/[your_device]/EternityKernel...zip```
+
+5. Flash it using a supported recovery like EternityTWRP or ExtremeTWRP
+
+6. Enjoy!
